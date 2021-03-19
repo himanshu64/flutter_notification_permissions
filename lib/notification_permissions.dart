@@ -7,7 +7,7 @@ class NotificationPermissions {
   static const MethodChannel _channel =
       const MethodChannel('notification_permissions');
 
-  static Future<PermissionStatus> requestNotificationPermissions(
+  static Future<PermissionStatusEnum> requestNotificationPermissions(
       {NotificationSettingsIos iosSettings = const NotificationSettingsIos(),
       bool openSettings = true}) async {
     final map = iosSettings.toMap();
@@ -17,7 +17,7 @@ class NotificationPermissions {
     return _getPermissionStatus(status);
   }
 
-  static Future<PermissionStatus> getNotificationPermissionStatus() async {
+  static Future<PermissionStatusEnum> getNotificationPermissionStatus() async {
     final String status =
         await _channel.invokeMethod('getNotificationPermissionStatus');
     return _getPermissionStatus(status);
@@ -27,21 +27,21 @@ class NotificationPermissions {
   ///
   /// Given a [String] status from the method channel, it returns a
   /// [PermissionStatus]
-  static PermissionStatus _getPermissionStatus(String status) {
+  static PermissionStatusEnum _getPermissionStatus(String status) {
     switch (status) {
       case "denied":
-        return PermissionStatus.denied;
+        return PermissionStatusEnum.denied;
       case "granted":
-        return PermissionStatus.granted;
+        return PermissionStatusEnum.granted;
       case "provisional":
-        return PermissionStatus.provisional;
+        return PermissionStatusEnum.provisional;
       default:
-        return PermissionStatus.unknown;
+        return PermissionStatusEnum.unknown;
     }
   }
 }
 
-enum PermissionStatus { granted, unknown, denied, provisional }
+enum PermissionStatusEnum { granted, unknown, denied, provisional }
 
 class NotificationSettingsIos {
   const NotificationSettingsIos({
